@@ -130,6 +130,7 @@ RequestManager.prototype.send = function (data, callback) {
     }
 
     var payload = Jsonrpc.toPayload(data.method, data.params);
+    console.log(JSON.stringify(payload));
     this.provider[this.provider.sendAsync ? 'sendAsync' : 'send'](payload, function (err, result) {
         if(result && result.id && payload.id !== result.id) return callback(new Error('Wrong response id "'+ result.id +'" (expected: "'+ payload.id +'") in '+ JSON.stringify(payload)));
 
@@ -144,6 +145,8 @@ RequestManager.prototype.send = function (data, callback) {
         if (!Jsonrpc.isValidResponse(result)) {
             return callback(errors.InvalidResponse(result));
         }
+
+        console.log(JSON.stringify(result.result));
 
         callback(null, result.result);
     });
